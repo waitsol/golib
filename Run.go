@@ -9,7 +9,7 @@ import (
 
 type Fun func()
 
-const MAXGOCOUNT = 100
+const MAXGOCOUNT = 10000
 
 var Wg sync.WaitGroup //
 var goCount int32     //当前协程数量
@@ -44,7 +44,7 @@ func Go(fun Fun) {
 				fmt.Println(debug.Stack())
 			}
 		}()
-		fun()
+		Try(fun)
 		if c >= MAXGOCOUNT {
 			return
 		}
@@ -57,4 +57,13 @@ func Go(fun Fun) {
 		Wg.Done()
 		atomic.AddInt32(&goCount, -1)
 	}()
+}
+func Try(f Fun) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println(err)
+			debug.PrintStack()
+		}
+	}()
+	f()
 }
