@@ -11,7 +11,7 @@ type Fun func()
 
 const MAXGOCOUNT = 10000
 
-var Wg sync.WaitGroup //
+var wg sync.WaitGroup //
 var goCount int32     //当前协程数量
 var ChanFun chan Fun
 
@@ -35,7 +35,7 @@ func Go(fun Fun) {
 		}
 	}
 
-	Wg.Add(1)
+	wg.Add(1)
 	go func() {
 		defer func() {
 			err := recover()
@@ -54,9 +54,12 @@ func Go(fun Fun) {
 				f()
 			}
 		}
-		Wg.Done()
+		wg.Done()
 		atomic.AddInt32(&goCount, -1)
 	}()
+}
+func Wait() {
+	wg.Wait()
 }
 func Try(f Fun) {
 	defer func() {
