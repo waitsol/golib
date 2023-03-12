@@ -17,6 +17,7 @@ var ChanFun chan Fun
 
 func init() {
 	ChanFun = make(chan Fun, 10)
+	wg = sync.WaitGroup{}
 }
 
 func Go(fun Fun) {
