@@ -15,11 +15,6 @@ var wg sync.WaitGroup //
 var goCount int32     //当前协程数量
 var ChanFun chan Fun
 
-func init() {
-	ChanFun = make(chan Fun, 10)
-	wg = sync.WaitGroup{}
-}
-
 func Go(fun Fun) {
 	var c int32
 	select {
